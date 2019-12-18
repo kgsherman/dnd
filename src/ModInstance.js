@@ -29,31 +29,38 @@ const Rolls = styled.div`
     font-weight: 400;
 `;
 
+const op = (operator) => operator === '-' ? '-' : '';
 
-const FlatModInstance = ({ description, x, total = null }) => {
+
+const FlatModInstance = ({ description, operator, x, total = null }) => {
     return (
         <Tile>
             <Name>{description}</Name>
             <Effect>
-                {numToString(x)}
+                {operator + x}
             </Effect>
             <Result>
-                {total || '-'}
+                {total
+                    ? op(operator) + total
+                    : '---'
+                }
             </Result>
         </Tile>
     )
 }
 
-const DiceModInstance = ({ description, n = 1, d, rolls = null, total = null }) => {
-
+const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total = null }) => {
     return (
         <Tile>
             <Name>{description}</Name>
             <Effect>
-                {n}d{d}
+                {operator === '-' && '-'}{n}d{d}
             </Effect>
             <Result>
-                {total || '-'}
+            {total
+                    ? op(operator) + total
+                    : '---'
+                }
                 {rolls?.length > 1 && <Rolls>
                     {JSON.stringify(rolls)}
                 </Rolls>}

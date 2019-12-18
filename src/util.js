@@ -4,26 +4,37 @@ export const numToString = (num) => {
 };
 
 export const parseModString = function (modString) {
-    const modParsed = modString.trim().match(/(.*)\((.*)\)/);
+    const matchRegex = /(^[\+\-])?(.*)\((.*)\)/;
 
-    if (modParsed === null || modParsed.length === 1) {
-        throw new Error('Error parsing mod string.')
+    const modParsed = modString
+        .trim()
+        .match(matchRegex);
+
+    if (modParsed === null || modParsed.length === 0) {
+        throw new Error(`Error parsing mod string "${modString}"; result was ${modParsed}`);
     }
+
+    console.log(modParsed);
     
-    const key = modParsed[2]
-    const value = modParsed[1];
+    const key = modParsed[3] || null;
+    const value = modParsed[2];
+
+    const base = {
+        description: key,
+        operator: modParsed[1] || '+',
+    }
     
     return value.includes('d')
         ? {
+            ...base,
             type: 'dice',
             n: parseInt(value.split('d')[0]),
             d: parseInt(value.split('d')[1]),
-            description: key,
         }
         : {
+            ...base,
             type: 'flat',
             x: parseInt(value),
-            description: key,
         }
 }
 

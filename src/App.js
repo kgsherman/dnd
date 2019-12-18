@@ -1,90 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-//import RollGroup from './RollGroup';
-
-import ModDefinition from './ModDefinition';
-
+import Set from './Set';
 import Roll from './Roll';
 
-const ModDefinitions = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 1.5rem;
+  padding: 1.2rem;
+  margin: 1.8rem;
+  border: 1px solid #ddd;
+`;
 
-  .title {
-    font-size: 1.4rem;
-    font-weight: 700;
-  }
-  .definitions {
-    display: flex;
-    flex-direction: row;
-  }
+const Title = styled.div`
+  font-size: 1.4rem;
+  font-weight: 700;
 `;
 
 
 const App = () => {
-  const initialMods = [
-    {
-      modString: "1d20(Base [Attack])",
-      selected: false,
-    }, {
-      modString: "1d8(Base [Damage])",
-      selected: false,
-    }, {
-      modString: "1d6(Hunter's Mark)",
-      selected: false,
-    }, {
-      modString: "1d8(Colossus Slayer)",
-      selected: false,
-    }, {
-      modString: "3(Proficiency)",
-      selected: false,
-    }, {
-      modString: "4(Dexterity)",
-      selected: false,
-    }, {
-      modString: "1(Bow +1)",
-      selected: false,
-    }, {
-      modString: "10(Sharpshooter [Damage])",
-      selected: false,
-    }, {
-      modString: "-5(Sharpshooter [Attack])",
-      selected: false,
-    },
+  const attackMods = [
+    '1d20(Base)',
+    '4(Dexterity)',
+    '3(Proficiency)',
+    '2(Archery Style)',
+    '1(Bow +1)',
+    '-5(Sharpshooter)',
+    '-2d6(Get fukt)'
   ];
 
-  const [mods, setMods] = useState(initialMods);
-  const [roll, setRoll] = useState([]);
+  const damageMods = [
+    '1d8(Base)',
+    '4(Dexterity)',
+    '1(Bow +1)',
+    "1d6(Hunter's Mark)",
+    "1d8(Colossus Slayer)",
+    '10(Sharpshooter)',
+  ]
 
-  const toggleSelect = index => {
-    const newMods = mods.map((mod, i) => {
-      if (i !== index)
-        return mod;
+  const [adhocString, setAdhocString] = useState('');
+  const [adhocRolls, setAdhocRolls] = useState([]);
 
-      return {
-        ...mod,
-        selected: !mod.selected,
-      }
-    });
+  useEffect(() => {
+    if (!adhocString) return;
 
-    setMods(newMods);
+    console.log(adhocString);
 
-    const newRoll = newMods.filter(mod => mod.selected).map(mod => mod.modString);
-    setRoll(newRoll);
-  }
+    const adhocSplit = ['+'].concat(adhocString.split(/([\+\-])/));
+    console.log(adhocSplit);
+
+    let adhocArray = [];
+
+    for (let i = 0; i < adhocSplit.length; i = i + 2) {
+      const operator = adhocSplit[i].trim();
+      const val = adhocSplit[i + 1].trim();
+
+      adhocArray.push(operator + val);
+    }
+
+    console.log(adhocArray);
+
+    //setAdhocRolls(adhocArray);
+
+  }, [adhocString])
  
   return (
     <section>
-      <ModDefinitions>
-        <div className="title">Modifier Definitions</div>
-        <div className="definitions">
-          {mods.map((mod, index) => <ModDefinition {...mod} index={index} key={`md${index}`} toggleSelect={toggleSelect}/>)}
-        </div>
-      </ModDefinitions>
-      <Roll modStrings={roll} />
+      <Container>
+        <Title>Attack</Title>
+        <Set mods={attackMods} />
+      </Container>
+
+      <Container>
+        <Title>Damage</Title>
+        <Set mods={damageMods} />
+      </Container>
+
+      <Container>
+        <Title>Ad-hoc</Title>
+        <label htmlFor="adhoc">Roll</label>
+        <input id="adhoc" onBlur={e => setAdhocString(e.target.value)} />
+        <Roll modStrings={adhocRolls} />
+      </Container>
     </section>
   );
 }

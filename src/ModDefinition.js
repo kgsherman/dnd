@@ -28,8 +28,8 @@ const ModDefinition = ({ modString, selected, index, toggleSelect }) => {
             <Name>{mod.description}</Name>
             <Effect>
                 {mod.type === 'flat'
-                    ? numToString(mod.x)
-                    : `${mod.n}d${mod.d}`
+                    ? mod.operator + mod.x
+                    : (mod.operator === '-' ? '-' : '') + `${mod.n}d${mod.d}`
                 }
             </Effect>
         </Container>

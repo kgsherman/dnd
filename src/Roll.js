@@ -56,7 +56,9 @@ const Roll = ({ modStrings }) => {
 
         setTotal(newRollArray.reduce( (previous, current) => {
             
-            return previous + current.total
+            return current.operator === '+' 
+                ? previous + current.total
+                : previous - current.total;
         }, 0));
     }
 
