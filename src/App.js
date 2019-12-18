@@ -38,6 +38,14 @@ const App = () => {
     '10(Sharpshooter)',
   ]
 
+  const spellMods = [
+    '1(Spell Modifier)',
+    '4(Spell Attack)',
+    '1d8(Cure Wounds)',
+    '2d4(Spike Growth)',
+    '4d6(Light Her Up)',
+  ];
+
   const [adhocString, setAdhocString] = useState('');
   const [adhocRolls, setAdhocRolls] = useState([]);
 
@@ -69,6 +77,11 @@ const App = () => {
       <Container>
         <Title>Damage</Title>
         <Set mods={damageMods} />
+      </Container>
+
+      <Container>
+        <Title>Spell</Title>
+        <Set mods={spellMods} />
       </Container>
 
       <Container>
