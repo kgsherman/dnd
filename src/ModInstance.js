@@ -5,6 +5,10 @@ import ReactTooltip from 'react-tooltip'
 import { numToString } from './util';
 import { Tile } from './styles';
 
+const Container = styled(Tile)`
+    align-items: flex-start;
+`;
+
 
 const Name = styled.div`
     font-style: italic;
@@ -42,7 +46,7 @@ const FlatModInstance = ({ description, operator, x, total = null }) => {
             <Result>
                 {total
                     ? op(operator) + total
-                    : '---'
+                    : '—'
                 }
             </Result>
         </Tile>
@@ -57,9 +61,9 @@ const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total 
                 {operator === '-' && '-'}{n}d{d}
             </Effect>
             <Result>
-            {total
+                {total
                     ? op(operator) + total
-                    : '---'
+                    : '—'
                 }
                 {rolls?.length > 1 && <Rolls>
                     {JSON.stringify(rolls)}

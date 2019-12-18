@@ -72,7 +72,7 @@ const Roll = ({ modStrings }) => {
             })}
 
             <Total>
-                {total ?? '-'}
+                {total ?? '—'}
             </Total>
         </Container>
     );
