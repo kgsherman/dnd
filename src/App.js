@@ -45,10 +45,7 @@ const App = () => {
   useEffect(() => {
     if (!adhocString) return;
 
-    console.log(adhocString);
-
     const adhocSplit = ['+'].concat(adhocString.split(/([\+\-])/));
-    console.log(adhocSplit);
 
     let adhocArray = [];
 
@@ -59,9 +56,7 @@ const App = () => {
       adhocArray.push(operator + val);
     }
 
-    console.log(adhocArray);
-
-    //setAdhocRolls(adhocArray);
+    setAdhocRolls(adhocArray);
 
   }, [adhocString])
  

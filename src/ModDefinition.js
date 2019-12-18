@@ -5,9 +5,10 @@ import { numToString, parseModString } from './util';
 import { Tile } from './styles';
 
 const Container = styled(Tile)`
+    cursor: pointer;
+    
     ${props => props.selected && css`
         box-shadow: 0px 1px 5px rgba(0, 255, 90, 0.4), 0px 0px 0px 1px rgba(0, 200, 90, 0.8);
-        
     `}
 `;
 
