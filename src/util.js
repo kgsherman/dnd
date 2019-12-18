@@ -4,7 +4,7 @@ export const numToString = (num) => {
 };
 
 export const parseModString = function (modString) {
-    const matchRegex = /(^[\+\-])?([^(]*)(\((.*)\))?/;
+    const matchRegex = /(^[+-])?([^(]*)(\((.*)\))?/;
 
     const modParsed = modString
         .trim()
@@ -13,8 +13,6 @@ export const parseModString = function (modString) {
     if (modParsed === null || modParsed.length === 0) {
         throw new Error(`Error parsing mod string "${modString}"; result was ${modParsed}`);
     }
-
-    console.log(modParsed);
    
     const key = modParsed[3] || null;
     const value = modParsed[2];

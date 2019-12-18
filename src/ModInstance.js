@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip'
 
-import { numToString } from './util';
 import { Tile } from './styles';
 
 const Container = styled(Tile)`
-    align-items: flex-start;
+    justify-content: flex-start;
 `;
 
 
@@ -38,7 +36,7 @@ const op = (operator) => operator === '-' ? '-' : '';
 
 const FlatModInstance = ({ description, operator, x, total = null }) => {
     return (
-        <Tile>
+        <Container>
             <Name>{description}</Name>
             <Effect>
                 {operator + x}
@@ -49,13 +47,13 @@ const FlatModInstance = ({ description, operator, x, total = null }) => {
                     : '—'
                 }
             </Result>
-        </Tile>
+        </Container>
     )
 }
 
 const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total = null }) => {
     return (
-        <Tile>
+        <Container>
             <Name>{description}</Name>
             <Effect>
                 {operator === '-' && '-'}{n}d{d}
@@ -69,7 +67,7 @@ const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total 
                     {JSON.stringify(rolls)}
                 </Rolls>}
             </Result>
-        </Tile>
+        </Container>
     )
 }
 

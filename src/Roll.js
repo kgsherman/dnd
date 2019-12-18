@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import uuidv4 from 'uuid/v4';
 
 import ModInstance from './ModInstance';
 
@@ -68,7 +69,7 @@ const Roll = ({ modStrings }) => {
                 <button onClick={resolve}>Roll</button>
             </RollButtonTile>
             {rollArray.map(roll => {
-                return <ModInstance {...roll} />
+                return <ModInstance {...roll} key={uuidv4()}/>
             })}
 
             <Total>

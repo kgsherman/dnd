@@ -27,7 +27,6 @@ const App = () => {
     '2(Archery Style)',
     '1(Bow +1)',
     '-5(Sharpshooter)',
-    '-2d6(Get fukt)'
   ];
 
   const damageMods = [
@@ -45,7 +44,7 @@ const App = () => {
   useEffect(() => {
     if (!adhocString) return;
 
-    const adhocSplit = ['+'].concat(adhocString.split(/([\+\-])/));
+    const adhocSplit = ['+'].concat(adhocString.split(/([+-])/));
 
     let adhocArray = [];
 
