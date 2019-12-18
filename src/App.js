@@ -75,7 +75,7 @@ const App = () => {
       <Container>
         <Title>Ad-hoc</Title>
         <label htmlFor="adhoc">Roll</label>
-        <input id="adhoc" onBlur={e => setAdhocString(e.target.value)} />
+        <input id="adhoc" placeholder='e.g. 1d10 + 2d4 + 5 + 1' onBlur={e => setAdhocString(e.target.value)} />
         <Roll modStrings={adhocRolls} />
       </Container>
     </section>
