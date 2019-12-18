@@ -1,84 +1,90 @@
 import React, { useState } from 'react';
-import { Card, Divider } from 'antd';
 import styled from 'styled-components';
 
-const Thing = styled(Card)`
-  width: 400px;
-`;
+//import RollGroup from './RollGroup';
 
-const RollGroup = styled.div`
+import ModDefinition from './ModDefinition';
+
+import Roll from './Roll';
+
+const ModDefinitions = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+
+  padding: 1.5rem;
+
+  .title {
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .definitions {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 
 const App = () => {
-  const [attack, setAttack] = useState(0);
-  const [damage, setDamage] = useState(0);
+  const initialMods = [
+    {
+      modString: "1d20(Base [Attack])",
+      selected: false,
+    }, {
+      modString: "1d8(Base [Damage])",
+      selected: false,
+    }, {
+      modString: "1d6(Hunter's Mark)",
+      selected: false,
+    }, {
+      modString: "1d8(Colossus Slayer)",
+      selected: false,
+    }, {
+      modString: "3(Proficiency)",
+      selected: false,
+    }, {
+      modString: "4(Dexterity)",
+      selected: false,
+    }, {
+      modString: "1(Bow +1)",
+      selected: false,
+    }, {
+      modString: "10(Sharpshooter [Damage])",
+      selected: false,
+    }, {
+      modString: "-5(Sharpshooter [Attack])",
+      selected: false,
+    },
+  ];
 
-  const bowAttack = e => {
-    e.preventDefault();
+  const [mods, setMods] = useState(initialMods);
+  const [roll, setRoll] = useState([]);
 
-    const roll = d(20) + 10;
-    setAttack(roll);
+  const toggleSelect = index => {
+    const newMods = mods.map((mod, i) => {
+      if (i !== index)
+        return mod;
+
+      return {
+        ...mod,
+        selected: !mod.selected,
+      }
+    });
+
+    setMods(newMods);
+
+    const newRoll = newMods.filter(mod => mod.selected).map(mod => mod.modString);
+    setRoll(newRoll);
   }
-
-  const bowDamage = e => {
-    e.preventDefault();
-
-    const roll = d(8) + 5;
-    setDamage(roll);
-  }
-
-  const bowDamageHM = e => {
-    e.preventDefault();
-
-    const roll = d(8) + 5 + d(6);
-    setDamage(roll);
-  }
-
-  const shockDamage = e => {
-    e.preventDefault();
-
-    const roll = d(6) + d(6) + d(6) + d(6);
-    setDamage(roll);
-  }
-
-  const d = sides => {
-    return Math.ceil(Math.random() * sides);
-  }
-
+ 
   return (
     <section>
-      <Thing title="Bow">
-        <RollGroup>
-          <span>
-            <b>Attack</b> | <i>1d20 + 10</i>
-          </span>
-          <button onClick={bowAttack}>Roll</button>  
-        </RollGroup>
-        <RollGroup>
-          <span>
-            <b>Damage</b> | <i>1d8 + 5</i>
-          </span>
-          <button onClick={bowDamage}>Roll</button>  
-        </RollGroup>
-        <RollGroup>
-          <span>
-            <b>Damage (Hunter's Mark)</b> | <i>1d8 + 5 + 1d6</i>
-          </span>
-          <button onClick={bowDamageHM}>Roll</button>  
-        </RollGroup>
-
-        <Divider />
-          <p>
-            Attack: {attack}
-          </p>
-          <p>
-            Damage: {damage}
-          </p>
-      </Thing>
+      <ModDefinitions>
+        <div className="title">Modifier Definitions</div>
+        <div className="definitions">
+          {mods.map((mod, index) => <ModDefinition {...mod} index={index} key={`md${index}`} toggleSelect={toggleSelect}/>)}
+        </div>
+      </ModDefinitions>
+      <Roll modStrings={roll} />
     </section>
   );
 }
