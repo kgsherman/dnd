@@ -14,7 +14,7 @@ export const parseModString = function (modString) {
         throw new Error(`Error parsing mod string "${modString}"; result was ${modParsed}`);
     }
    
-    const key = modParsed[3] || null;
+    const key = modParsed[4] || null;
     const value = modParsed[2];
 
     const base = {
