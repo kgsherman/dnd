@@ -28,6 +28,7 @@ export const parseModString = function (modString) {
             type: 'dice',
             n: parseInt(value.split('d')[0]),
             d: parseInt(value.split('d')[1]),
+            rolls: [],
         }
         : {
             ...base,

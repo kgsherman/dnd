@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
 
-import ModInstance from './ModInstance';
+import ModDefinition from './ModDefinition';
 
-import { parseModString, dice } from './util';
-import { Tile } from './styles';
+import { parseModString, dice } from '../util';
+import { Tile } from '../styles';
 
 const Container = styled.div`
     display: flex;
@@ -69,7 +69,7 @@ const Roll = ({ modStrings }) => {
                 <button onClick={resolve}>Roll</button>
             </RollButtonTile>
             {rollArray.map(roll => {
-                return <ModInstance {...roll} key={uuidv4()}/>
+                return <ModDefinition {...roll} key={uuidv4()}/>
             })}
 
             <Total>

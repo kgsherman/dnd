@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { Tile } from './styles';
+import { Tile } from '../styles';
 
 const Container = styled(Tile)`
     justify-content: flex-start;
@@ -24,11 +24,19 @@ const Result = styled.div`
 
     font-size: 1.15rem;
     font-weight: 600;
+
+    ${props => props.hasCrit && css`
+        color: green;
+    `}
+
+    ${props => props.hasCritFail && css`
+        color: red;
+    `}
 `;
 
 const Rolls = styled.div`
     font-size: 0.8rem;
-    font-weight: 400;
+    font-weight: 400;   
 `;
 
 const op = (operator) => operator === '-' ? '-' : '';
@@ -58,14 +66,16 @@ const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total 
             <Effect>
                 {operator === '-' && '-'}{n}d{d}
             </Effect>
-            <Result>
+            <Result hasCrit={rolls?.includes(d)} hasCritFail={rolls?.includes(1)}>
                 {total
                     ? op(operator) + total
                     : '—'
                 }
-                {rolls?.length > 1 && <Rolls>
-                    {JSON.stringify(rolls)}
-                </Rolls>}
+                {rolls?.length > 1 && 
+                    <Rolls>
+                        {JSON.stringify(rolls)}
+                    </Rolls>
+                }
             </Result>
         </Container>
     )
@@ -73,10 +83,8 @@ const DiceModInstance = ({ description, operator, n = 1, d, rolls = null, total 
 
 const ModInstance = (props) => {
     if (props.type === 'flat') {
-
         return <FlatModInstance {...props} />
     } else {
-
         return <DiceModInstance {...props} />
     }
 }

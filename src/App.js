@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import Set from './Set';
-import Roll from './Roll';
+import Group from './Components/Group';
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +19,26 @@ const Title = styled.div`
 
 
 const App = () => {
+  const attackMods = [
+    '1d20(Base)',
+    '3(Dexterity)',
+    '3(Proficiency)',
+    '6(Spell Attack)',
+  ];
+
+  const damageMods = [
+    '1d8(Base)',
+    '3(Dexterity)',
+    '1d6(Hex)',
+  ]
+
+  const spellMods = [
+    '2d6(Sword Burst)',
+    '2d10(Eldritch Blast)',
+    '3(Spell Attack)',
+  ];
+
+ /*
   const attackMods = [
     '1d20(Base)',
     '4(Dexterity)',
@@ -45,6 +64,7 @@ const App = () => {
     '2d4(Spike Growth)',
     '4d6(Light Her Up)',
   ];
+  */
 
   const [adhocString, setAdhocString] = useState('');
   const [adhocRolls, setAdhocRolls] = useState([]);
@@ -69,27 +89,16 @@ const App = () => {
  
   return (
     <section>
-      <Container>
-        <Title>Attack</Title>
-        <Set mods={attackMods} />
-      </Container>
-
-      <Container>
-        <Title>Damage</Title>
-        <Set mods={damageMods} />
-      </Container>
-
-      <Container>
-        <Title>Spell</Title>
-        <Set mods={spellMods} />
-      </Container>
-
-      <Container>
+      <Group title="Attack" modStrings={attackMods}/>
+      <Group title="Damage" modStrings={damageMods}/>
+      <Group title="Spells" modStrings={spellMods}/>
+      
+      {/*<Container>
         <Title>Ad-hoc</Title>
         <label htmlFor="adhoc">Roll</label>
         <input id="adhoc" placeholder='e.g. 1d10 + 2d4 + 5 + 1' onBlur={e => setAdhocString(e.target.value)} />
         <Roll modStrings={adhocRolls} />
-      </Container>
+      </Container>*/}
     </section>
   );
 }
