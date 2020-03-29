@@ -3,7 +3,12 @@ import styled, { css } from 'styled-components';
 
 import { Tile } from '../styles';
 
-const Container = styled(Tile)`
+const ModContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const ModTile = styled(Tile)`
     cursor: pointer;
 
     ${props => props.selected && css`
@@ -57,6 +62,13 @@ const CritFailRoll = styled.span`
     color: red;
 `;
 
+const CritSelect = styled(Tile)`
+    cursor: pointer;
+    padding: 0.2em;
+    margin-top: 0em;
+    color: ${props => props.isCrit ? 'red' : 'grey'};
+`;
+
 const FlatMod = ({ operator, x, total = null }) => {
     return (
         <>
@@ -104,13 +116,16 @@ const DiceMod = ({ operator, n = 1, d = 99, rolls = null, total = null }) => {
 const Mod = (props) => {
 
     return (
-        <Container selected={props.selected} onClick={() => props.toggleSelect(props.index)}>
-            <Name>{props.description}</Name>
-            {props.type === 'flat'
-                ? <FlatMod {...props} />
-                : <DiceMod {...props} />
-            }
-        </Container>
+        <ModContainer>
+            <ModTile selected={props.selected} onClick={() => props.toggleSelect(props.index)}>
+                <Name>{props.description}</Name>
+                {props.type === 'flat'
+                    ? <FlatMod {...props} />
+                    : <DiceMod {...props} />
+                }
+            </ModTile>
+            {props.canCrit && <CritSelect isCrit={props.isCrit} onClick={() => props.toggleCrit(props.index)}>!</CritSelect>}
+        </ModContainer>
     );
 }
 

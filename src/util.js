@@ -3,8 +3,24 @@ export const numToString = (num) => {
     return sign + Math.abs(num);
 };
 
+/*export const parseModStrings = function (modStrings) {
+    const split = modStrings
+        .map((modString, i) => {
+            const firstChar = modString.charAt(0)
+            if (firstChar !== '+' && firstChar !== '-' && i > 0)
+                return '+' + modString;
+            else
+                return modString;
+        })
+        .join('')
+        .split(/[+-]/);
+    const mods = split.map(modString => parseModString(modString));
+
+    return mods;
+}*/
+
 export const parseModString = function (modString) {
-    const matchRegex = /(^[+-])?([^(]*)(\((.*)\))?/;
+    const matchRegex = /(^[+-])?([^(]*)(\((.*)\))?(!)?/;
 
     const modParsed = modString
         .trim()
@@ -17,6 +33,8 @@ export const parseModString = function (modString) {
     const key = modParsed[4] || null;
     const value = modParsed[2];
 
+    console.log(modParsed)
+
     const base = {
         description: key,
         operator: modParsed[1] || '+',
@@ -28,6 +46,7 @@ export const parseModString = function (modString) {
             type: 'dice',
             n: parseInt(value.split('d')[0]),
             d: parseInt(value.split('d')[1]),
+            canCrit: modParsed[5],
             rolls: [],
         }
         : {
