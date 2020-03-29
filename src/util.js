@@ -20,7 +20,7 @@ export const numToString = (num) => {
 }*/
 
 export const parseModString = function (modString) {
-    const matchRegex = /(^[+-])?([^(]*)(\((.*)\))?(!)?/;
+    const matchRegex = /(^[+-])?([^(!]*)(\((.*)\))?(!)?/;
 
     const modParsed = modString
         .trim()
