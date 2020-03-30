@@ -85,6 +85,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
       return {
         ...mod,
         isCrit: !mod.isCrit,
+        selected: !mod.isCrit || mod.selected,
       }
     });
 
@@ -100,6 +101,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
         ...mod,
         withAdvantage: !mod.withAdvantage,
         withDisadvantage: false,
+        selected: !mod.withAdvantage || mod.selected,
       }
     });
 
@@ -115,6 +117,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
         ...mod,
         withDisadvantage: !mod.withDisadvantage,
         withAdvantage: false,
+        selected: !mod.withDisadvantage || mod.selected,
       }
     });
 
