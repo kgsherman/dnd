@@ -10,6 +10,7 @@ const ModContainer = styled.div`
 
 const ModTile = styled(Tile)`
     cursor: pointer;
+    min-width: 100px;
 
     ${props => props.selected && css`
         box-shadow: 0px 1px 5px rgba(0, 255, 90, 0.4), 0px 0px 0px 1px rgba(0, 200, 90, 0.8);
@@ -23,6 +24,8 @@ const Name = styled.div`
 
 const Effect = styled.div`
     font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.3em;
 `;
 
 const Result = styled.div`
@@ -48,8 +51,17 @@ const Result = styled.div`
 `;
 
 const Rolls = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-size: 0.8rem;
     font-weight: 400;   
+`;
+
+const Roll = styled.div`
+    font-style: ${props => props.taken ? 'inherit' : 'italic'};
+    opacity: ${props => props.taken ? 'inherit' : 0.5};
+    line-height: 1.1em;
 `;
 
 const op = (operator) => operator === '-' ? '-' : '';
@@ -69,7 +81,32 @@ const CritSelect = styled(Tile)`
     color: ${props => props.isCrit ? 'red' : 'grey'};
 `;
 
-const FlatMod = ({ operator, x, total = null }) => {
+const AdvantageContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const AdvantageSelect = styled(Tile)`
+    flex-grow: 1;
+    cursor: pointer;
+    padding: 0.2em;
+    margin-top: 0em;
+    margin-right: 0.2em;
+    color: ${props => props.advantage ? 'green' : 'grey'};
+`;
+
+const DisadvantageSelect = styled(Tile)`
+flex-grow: 1;
+    cursor: pointer;
+    padding: 0.2em;
+    margin-top: 0em;
+    margin-left:0.2em;
+    color: ${props => props.disadvantage ? 'red' : 'grey'};
+`;
+
+
+
+const FlatMod = ({ operator, x }) => {
     return (
         <>
             <Result>
@@ -80,30 +117,38 @@ const FlatMod = ({ operator, x, total = null }) => {
 }
 
 const DiceMod = ({ operator, n = 1, d = 99, rolls = null, total = null }) => {
+
+    const showRolls = rolls?.length > 0 && (rolls.length > 1 || rolls[0].dice.length > 1);
+    const hasCrit = rolls?.length > 0 && rolls.find(roll => roll.taken && roll.dice.includes(d));
+    const hasCritFail = rolls?.length > 0 && rolls.find(roll => roll.taken && roll.dice.includes(1));
+
     return (
         <>
-            <Result hasCrit={rolls?.includes(d)} hasCritFail={rolls?.includes(1)}>
+            <Result hasCrit={hasCrit} hasCritFail={hasCritFail}>
                 {total
                     ? op(operator) + total
                     : '—'
                 }
             </Result>
-            {rolls?.length > 1 &&
+            
+            {showRolls &&
                 <Rolls>
-                    [
-                        {rolls.map((roll, i) => {
-                            const result = i > 0 ? [', '] : [];
+                    {rolls.map(roll => (
+                        <Roll taken={roll.taken}>
+                            {roll.dice.map((die, i) => {
+                                const result = i > 0 ? [', '] : [];
 
-                            if (roll === d) 
-                                result.push(<CritRoll>{roll}</CritRoll>);
-                            else if (roll === 1) 
-                                result.push(<CritFailRoll>{roll}</CritFailRoll>);
-                            else 
-                                result.push(roll);
+                                if (roll.taken && die === d)
+                                    result.push(<CritRoll>{die}</CritRoll>);
+                                else if (roll.taken && die === 1)
+                                    result.push(<CritFailRoll>{die}</CritFailRoll>);
+                                else
+                                    result.push(die);
 
-                            return result;
-                        })}
-                    ]
+                                return result;
+                            })}
+                        </Roll>
+                    ))}
                 </Rolls>
             }
             <Effect>
@@ -125,6 +170,10 @@ const Mod = (props) => {
                 }
             </ModTile>
             {props.canCrit && <CritSelect isCrit={props.isCrit} onClick={() => props.toggleCrit(props.index)}>!</CritSelect>}
+            {props.canAdvantage && <AdvantageContainer>
+                <AdvantageSelect advantage={props.withAdvantage} onClick={() => props.toggleAdvantage(props.index)}>▲</AdvantageSelect>
+                <DisadvantageSelect disadvantage={props.withDisadvantage} onClick={() => props.toggleDisadvantage(props.index)}>▼</DisadvantageSelect>
+            </AdvantageContainer>}
         </ModContainer>
     );
 }

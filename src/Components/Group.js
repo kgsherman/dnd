@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
-import { parseModString, dice } from '../util';
+import { parseModString, getRolls } from '../util';
 import { Tile } from '../styles';
 import Mod from './Mod';
 
@@ -57,9 +57,11 @@ const Group = ({ title, modStrings, startSelected = false }) => {
         ...parseModString(modString),
         selected: startSelected,
         isCrit: false,
+        withAdvantage: false,
+        withDisadvantage: false,
       }))
     )
-  }, [ modStrings ])
+  }, [modStrings])
 
   const toggleSelect = index => {
     const newMods = mods.map((mod, i) => {
@@ -89,13 +91,68 @@ const Group = ({ title, modStrings, startSelected = false }) => {
     setMods(newMods);
   }
 
+  const toggleAdvantage = index => {
+    const newMods = mods.map((mod, i) => {
+      if (i !== index)
+        return mod;
+
+      return {
+        ...mod,
+        withAdvantage: !mod.withAdvantage,
+        withDisadvantage: false,
+      }
+    });
+
+    setMods(newMods);
+  }
+
+  const toggleDisadvantage = index => {
+    const newMods = mods.map((mod, i) => {
+      if (i !== index)
+        return mod;
+
+      return {
+        ...mod,
+        withDisadvantage: !mod.withDisadvantage,
+        withAdvantage: false,
+      }
+    });
+
+    setMods(newMods);
+  }
+
   const resolve = e => {
     e.preventDefault();
 
     const newMods = mods.map(mod => {
-      const { rolls, total } = mod.type === 'dice'
+
+      if (mod.type === 'dice') {
+        if (mod.selected) {
+          const advantage = mod.withAdvantage ? 1 : mod.withDisadvantage ? -1 : 0;
+          const rolls = getRolls(mod.n * (+mod.isCrit + 1), mod.d, advantage);
+          const total = rolls.filter(roll => roll.taken)[0].total;
+
+          return {
+            ...mod,
+            rolls,
+            total,
+          }
+        } else return {
+          ...mod,
+          rolls: null,
+          total: null,
+        }
+      } else {
+        return {
+          ...mod,
+          rolls: null,
+          total: mod.x
+        }
+      }
+
+      /*const { rolls, total } = mod.type === 'dice'
         ? mod.selected
-          ? dice(mod.n * (+mod.isCrit + 1), mod.d)
+          ? rollDice(mod.n * (+mod.isCrit + 1), mod.d, advantage)
           : {
             rolls: null,
             total: null
@@ -110,6 +167,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
         rolls,
         total,
       }
+      */
     });
 
     setMods(newMods);
@@ -126,7 +184,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
       <Title>{title}</Title>
       <Tiles>
         <RollButton onClick={resolve}>Roll</RollButton>
-        {mods.map((mod, i) => <Mod {...mod} index={i} key={uuidv4()} toggleSelect={toggleSelect} toggleCrit={toggleCrit} />)}
+        {mods.map((mod, i) => <Mod {...mod} index={i} key={uuidv4()} toggleSelect={toggleSelect} toggleCrit={toggleCrit} toggleDisadvantage={toggleDisadvantage} toggleAdvantage={toggleAdvantage} />)}
         <Total>
           {total ?? '—'}
         </Total>

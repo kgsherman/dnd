@@ -20,7 +20,7 @@ export const numToString = (num) => {
 }*/
 
 export const parseModString = function (modString) {
-    const matchRegex = /(^[+-])?([^(!]*)(\((.*)\))?(!)?/;
+    const matchRegex = /(^[+-])?([^(!]*)(\((.*)\))?(!)?(A)?/;
 
     const modParsed = modString
         .trim()
@@ -33,8 +33,6 @@ export const parseModString = function (modString) {
     const key = modParsed[4] || null;
     const value = modParsed[2];
 
-    console.log(modParsed)
-
     const base = {
         description: key,
         operator: modParsed[1] || '+',
@@ -46,7 +44,8 @@ export const parseModString = function (modString) {
             type: 'dice',
             n: parseInt(value.split('d')[0]),
             d: parseInt(value.split('d')[1]),
-            canCrit: modParsed[5],
+            canCrit: !!modParsed[5],
+            canAdvantage: !!modParsed[6],
             rolls: [],
         }
         : {
@@ -56,8 +55,50 @@ export const parseModString = function (modString) {
         }
 }
 
-export const dice = (n, d) => {
-    const rolls = Array(n).fill(0).map(roll => Math.ceil(Math.random() * d));
-    const total = rolls.reduce((previous, current) => previous + current, 0);
+export const getRolls = (n = 1, d = 20, advantage = 0) => {
+    const results = Array(1 + Math.abs(advantage))
+        .fill(0)
+        .map(() => {
+            const dice = rollDice(n, d);
+            return {
+                dice: dice,
+                total: getTotal(dice),
+            }
+        })
+        .map((result, i, rawResults) => {
+            const totals = rawResults.map(rawResult => rawResult.total);
+            const desiredTotal = advantage >= 0
+                ? Math.max.apply(null, totals)
+                : Math.min.apply(null, totals)
+
+            const desiredRollIndex = rawResults.findIndex(rawResult => rawResult.total === desiredTotal);
+
+
+            return {
+                ...result,
+                taken: i === desiredRollIndex,
+            }
+        });
+    
+    return results;
+}
+
+export const rollDice = (n, d) => Array(n).fill(0).map(() => Math.ceil(Math.random() * d));
+
+export const getTotal = rolls => rolls.reduce((previous, current) => previous + current, 0);
+
+
+export const diceold = (n = 1, d = 20, advantage = 0) => {
+    const rolls = advantage === 0
+        ? Array(n).fill(0).map(() => Math.ceil(Math.random() * d))
+        : [Array(n).fill(0).map(() => Math.ceil(Math.random() * d)), Array(n).fill(0).map(() => Math.ceil(Math.random() * d))]
+
+    const total = advantage === 0
+        ? rolls.reduce((previous, current) => previous + current, 0)
+        : advantage > 0
+            ? Math.max(rolls[0].reduce((previous, current) => previous + current, 0), rolls[1].reduce((previous, current) => previous + current, 0))
+            : Math.min(rolls[0].reduce((previous, current) => previous + current, 0), rolls[1].reduce((previous, current) => previous + current, 0))
+
     return { rolls, total };
 };
+

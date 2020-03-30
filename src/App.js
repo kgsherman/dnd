@@ -20,7 +20,7 @@ const Title = styled.div`
 
 const App = () => {
   const attackMods = [
-    '1d20(Base)',
+    '1d20(Base)A',
     '4(Dexterity)',
     '3(Proficiency)',
     '6(Spell Attack)',
