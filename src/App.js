@@ -21,16 +21,16 @@ const Title = styled.div`
 const App = () => {
   const attackMods = [
     '1d20(Base)A',
+    '1(Rapier +1)',
     '4(Dexterity)',
     '3(Proficiency)',
-    '1(Rapier +1)',
     '6(Spell Attack)',
   ];
 
   const damageMods = [
     '1d8(Rapier Base)!',
-    '1(Rapier +1)',
     '1d6(Shortsword Base)!',
+    '1(Rapier +1)',
     '4(Dexterity)',
     '1d6(Hex)',
   ]

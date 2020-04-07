@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
+import { FaDiceD20 } from 'react-icons/fa';
+
 import { parseModString, getRolls } from '../util';
 import { Tile } from '../styles';
+
 import Mod from './Mod';
 
 
@@ -23,6 +26,8 @@ const RollButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 2.5em;
+  min-width: 2.5em;
 
   background-color: white;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.15);
@@ -152,25 +157,6 @@ const Group = ({ title, modStrings, startSelected = false }) => {
           total: mod.x
         }
       }
-
-      /*const { rolls, total } = mod.type === 'dice'
-        ? mod.selected
-          ? rollDice(mod.n * (+mod.isCrit + 1), mod.d, advantage)
-          : {
-            rolls: null,
-            total: null
-          }
-        : {
-          rolls: null,
-          total: mod.x,
-        };
-
-      return {
-        ...mod,
-        rolls,
-        total,
-      }
-      */
     });
 
     setMods(newMods);
@@ -186,7 +172,7 @@ const Group = ({ title, modStrings, startSelected = false }) => {
     <Container>
       <Title>{title}</Title>
       <Tiles>
-        <RollButton onClick={resolve}>Roll</RollButton>
+        <RollButton onClick={resolve}> <FaDiceD20/> </RollButton>
         {mods.map((mod, i) => <Mod {...mod} index={i} key={uuidv4()} toggleSelect={toggleSelect} toggleCrit={toggleCrit} toggleDisadvantage={toggleDisadvantage} toggleAdvantage={toggleAdvantage} />)}
         <Total>
           {total ?? '—'}
