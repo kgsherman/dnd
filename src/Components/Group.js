@@ -172,11 +172,15 @@ const Group = ({ title, modStrings, startSelected = false }) => {
     <Container>
       <Title>{title}</Title>
       <Tiles>
-        <RollButton onClick={resolve}> <FaDiceD20/> </RollButton>
+        <div>
+          <RollButton onClick={resolve}><FaDiceD20 /></RollButton>
+        </div>
         {mods.map((mod, i) => <Mod {...mod} index={i} key={uuidv4()} toggleSelect={toggleSelect} toggleCrit={toggleCrit} toggleDisadvantage={toggleDisadvantage} toggleAdvantage={toggleAdvantage} />)}
-        <Total>
-          {total ?? '—'}
-        </Total>
+        <div>
+          <Total>
+            {total ?? '—'}
+          </Total>
+        </div>
       </Tiles>
     </Container>
   );

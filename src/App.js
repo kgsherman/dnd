@@ -37,7 +37,7 @@ const App = () => {
 
   const spellMods = [
     '2d6(Sword Burst)',
-    '2d10(Eldritch Blast)',
+    '1d10(Eldritch Blast)',
     '3(Spell Attack)',
   ];
 
